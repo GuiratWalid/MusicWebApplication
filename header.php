@@ -63,10 +63,10 @@
                 <div class="limit-box">
                   <nav class="main-menu ">
                     <ul class="menu-area-main">
-                      <li class="active"> <a href="index.html">Home</a> </li>
+                      <li class="active"> <a href="index.html">Acceuil</a> </li>
                   
-                      <li> <a href="about.html">About</a> </li>
-                      <li > <a   href="connexion.php">login</a> </li>
+                      <li> <a href="about.html">A propos</a> </li>
+                      <li > <a   href="php/loginPage.php">Login</a> </li>
                       
                      </ul>
                    </nav>

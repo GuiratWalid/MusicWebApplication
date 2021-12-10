@@ -25,8 +25,7 @@ include('header.php');
                     <div class="text-bg">
                       <span>Écouter, ça change tout</span>
                       <h1>Des millions de titres et de podcasts.</h1>
-                      <a href="php/loginPage.php">Connexion</a><a href="php/registerPage.php">Inscription </a>
-                      
+                      <a href="php/login.php">Connexion</a><a href="php/register.php">Inscription </a>
                     </div>
                   </div>
                 </div>
@@ -42,8 +41,8 @@ include('header.php');
                   <div class="col-md-12">
                     <div class="text-bg">
                         <span>Le meilleur </span>
-                      <h1>Site de music</h1>
-                      <a href="#">Connexion</a><a href="#">Inscription </a>
+                      <h1>Site de musique</h1>
+                      <a href="php/login.php">Connexion</a><a href="php/register.php">Inscription </a>
                     </div>
                   </div>
 
