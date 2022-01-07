@@ -14,15 +14,15 @@ function sendmail($objet, $contenu, $destinataire) {
   try {
     /* DONNEES SERVEUR */
     #####################
-    $mail->setLanguage('fr', '../vendor/phpmailer/phpmailerlanguage/');   // pour avoir les messages d'erreur en FR
+    $mail->setLanguage('fr', '../../vendor/phpmailer/phpmailerlanguage/');   // pour avoir les messages d'erreur en FR
     $mail->SMTPDebug = 0;            // en production (sinon "2")
     // $mail->SMTPDebug = 2;            // décommenter en mode débug
     $mail->isSMTP();                                                            // envoi avec le SMTP du serveur
     $mail->Host       = 'smtp du serveur';                            // serveur SMTP
     $mail->SMTPAuth   = true;                                            // le serveur SMTP nécessite une authentification ("false" sinon)
     $mail->Username   = 'guiratguirat123@gmail.com';     // login SMTP
-    $mail->Password   = 'guiratguirat123';                                                // Mot de passe SMTP
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     // encodage des données TLS (ou juste 'tls') > "Aucun chiffrement des données"; sinon PHPMailer::ENCRYPTION_SMTPS (ou juste 'ssl')
+    $mail->Password   = '';                                                // Mot de passe SMTP
+    // $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;     // encodage des données TLS (ou juste 'tls') > "Aucun chiffrement des données"; sinon PHPMailer::ENCRYPTION_SMTPS (ou juste 'ssl')
     $mail->Port       = 587;                                                               // port TCP (ou 25, ou 465...)
     
     /* DONNEES DESTINATAIRES */
