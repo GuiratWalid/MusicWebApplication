@@ -2,7 +2,7 @@
     $display = null;
     if(isset($_GET['vkey'])){
         $Vkey=$_GET['vkey'];
-        include('../connexion.php');
+        include('../tools/connexion.php');
         $query="SELECT verifier,vkey FROM users WHERE verifier=0 AND vkey='$Vkey' LIMIT 1";
         $result = $connexion->query($query); 
         if($result->num_rows==1){
@@ -39,7 +39,7 @@
 <div class="container register">
         <div class="row">
             <div class="col-md-3 register-left">
-                <img src="....//images/music.png" alt="" />
+                <img src="../../images/music.png" alt="" />
                 <h3>Vérification du compte !</h3>
             </div>
             <div class="col-md-9 register-right">
@@ -50,7 +50,7 @@
                             <div class="col-3"></div>
                             <p>Veuillez se connecter sur votre compte ?</p>
                             <div class="col-5"></div>
-                            <form action="loginPage.php">
+                            <form action="login.php">
                                 <input type="submit" class="btn btn-primary mt-3" name="login" value="Se connecter" /><br />
                             </form>
                         </div>

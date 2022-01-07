@@ -9,10 +9,10 @@
             $Vkey = $row["vkey"];
             $dest = $email;
             $objet = "Mot de passe oublié !";
-            $message="<a href='http://localhost/music/php/passwordForgotten.php?vkey=$Vkey'>Vérification de compte</a>";
+            $contenu="<a href='http://localhost/music/php/passwordForgotten.php?vkey=$Vkey'>Vérification de compte</a>";
         
             include('sendMail.php');
-            $retval = sendmail($message, $contenu, $dest);
+            $retval = sendmail($objet, $contenu, $dest);
             if( $retval == true ) 
                 $msg = "Email envoyé avec succès !";
             else
