@@ -10,7 +10,7 @@ if(!check("user")){
         include('../tools/connexion.php');
         $query="SELECT * FROM users WHERE (username='$login' OR email='$login') AND role ='user' LIMIT 1";
         $result = $connexion->query($query); 
-        if($result->fetch_assoc()){
+        if($row1=$result->fetch_assoc()){
             $query1="SELECT * FROM users WHERE (username='$login' OR email='$login') AND password='$password' AND role ='user' LIMIT 1";
             $result1 = $connexion->query($query1); 
             if($row = $result1->fetch_assoc()){
@@ -86,7 +86,7 @@ else{
                                     <input type="checkbox" id="garder" name="garder">
                                     <label for="garder">Me rappeler</label>
                                 </div>
-                                <p><a href="mailPasswordForgotten.php">Vous n'avez oublié votre mot de passe ? </a></p>
+                                <p><a href="mailPasswordForgotten.php">Vous avez oublié votre mot de passe ? </a></p>
                                 <p>Vous n'avez pas un compte ? <a href="register.php">créer un compte</a></p>
                                 <input type="submit" class="btnRegister" name="signin" value="Se connecter" />
                             </form>

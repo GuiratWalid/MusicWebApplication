@@ -3,7 +3,7 @@
     $success = null;
     if(isset($_GET['vkey'])){
         $Vkey=$_GET['vkey'];
-        include('connexion.php');
+        include('../tools/connexion.php');
         if(isset($_POST['pwd'])){
             $password=$_POST['password'];
             $password1=$_POST['password1'];
@@ -34,7 +34,7 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../css/signup.css">
+    <link rel="stylesheet" href="../../css/signup.css">
     <title>Changer le mot de passe</title>
 </head>
 
@@ -42,7 +42,7 @@
     <div class="container register">
         <div class="row">
             <div class="col-md-3 register-left">
-                <img src="../images/music.png" alt="" />
+                <img src="../../images/music.png" alt="" />
                 <h3>Mot de passe oublié !</h3>
                 <p>Changer votre mot de passe et se connecter à votre compte dès maintenant !</p>
             </div>
