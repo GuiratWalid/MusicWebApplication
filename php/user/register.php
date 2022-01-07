@@ -1,69 +1,75 @@
 <?php 
-$error=NULL;
-$success = NULL;echo time();
-if(isset($_POST['register'])){
+include('../tools/checkSession.php');
+if(!check("user")){
+    $error=NULL;
+    $success = NULL;
+    if(isset($_POST['register'])){
 
-    //upload image initialization
-    $filename = md5(time());
-    $filename .= $_FILES["image"]["name"];
-    $tempname = $_FILES["image"]["tmp_name"];    
-    $folder = "../images/uploads/".$filename;
+        //upload image initialization
+        $filename = md5(time());
+        $filename .= $_FILES["image"]["name"];
+        $tempname = $_FILES["image"]["tmp_name"];    
+        $folder = "../../images/uploads/".$filename;
 
-    //Get form data
-    $fullname=$_POST['fullname'];
-    $email=$_POST['email'];
-    $password=$_POST['password'];
-    $password2=$_POST['password2'];
-    $genre=$_POST['genre'];
-    $username=$_POST['username'];
-    $datenais=$_POST['datenais'];
-    $lieu=$_POST['lieu'];
+        //Get form data
+        $fullname=$_POST['fullname'];
+        $email=$_POST['email'];
+        $password=$_POST['password'];
+        $password2=$_POST['password2'];
+        $genre=$_POST['genre'];
+        $username=$_POST['username'];
+        $datenais=$_POST['datenais'];
+        $lieu=$_POST['lieu'];
 
-    //Generate Vkey
-    $Vkey=md5(time().$username);
+        //Generate Vkey
+        $Vkey=md5(time().$username);
 
-    //Insert and account
-    if($password !== $password2){
-        $error="Mot de passe incorrect !";
-    }
-    else{
-        $password = md5($password);
-        include('connexion.php');
-        $query="SELECT * FROM users WHERE email='$email' LIMIT 1";
-        $result = $connexion->query($query); 
-        if($result->num_rows==1){
-            $error="L'email doit être unique !";
+        //Insert and account
+        if($password !== $password2){
+            $error="Mot de passe incorrect !";
         }
         else{
-            $query="SELECT * FROM users WHERE username='$username' LIMIT 1";
+            $password = md5($password);
+            include('../tools/connexion.php');
+            $query="SELECT * FROM users WHERE email='$email' LIMIT 1";
             $result = $connexion->query($query); 
             if($result->num_rows==1){
-                $error="Le username doit être unique !";
+                $error="L'email doit être unique !";
             }
             else{
-                $query="insert into users (username,fullname,password,genre,lieu,datenais,email,image,vkey) values ('$username','$fullname','$password','$genre','$lieu','$datenais','$email','$filename','$Vkey')";
-                //upload image
-                if (move_uploaded_file($tempname, $folder))  {
-                    $msg = "Image uploaded successfully";
-                }else{
-                    $msg = "Failed to upload image";
-              }
-                if (mysqli_query($connexion,$query)){
-                    include('sendMail.php');
-                    $success = "Compte créé avec succès !\n Veuillez le vérifier avec votre email";
-                    $subject="Email de vérification";
-                    $message="<a href='http://localhost/music/php/verify.php?vkey=$Vkey'>Vérification de compte</a>";
-                    sendmail($subject, $message, $mail);
-                    if( $retval == true ) {
-                        echo "Message sent successfully...";
-                     }else {
-                        echo "Message could not be sent...";
-                     }
-                    $success = "Compte créé avec succès ! Vous devez le vérifier avant 24 heures !";
+                $query="SELECT * FROM users WHERE username='$username' LIMIT 1";
+                $result = $connexion->query($query); 
+                if($result->num_rows==1){
+                    $error="Le username doit être unique !";
+                }
+                else{
+                    $query="insert into users (username,fullname,password,genre,lieu,datenais,email,image,vkey) values ('$username','$fullname','$password','$genre','$lieu','$datenais','$email','$filename','$Vkey')";
+                    //upload image
+                    if (move_uploaded_file($tempname, $folder))  {
+                        $msg = "Image uploaded successfully";
+                    }else{
+                        $msg = "Failed to upload image";
+                }
+                    if (mysqli_query($connexion,$query)){
+                        include('sendMail.php');
+                        $success = "Compte créé avec succès !\n Veuillez le vérifier avec votre email";
+                        $subject="Email de vérification";
+                        $message="<a href='http://localhost/music/php/verify.php?vkey=$Vkey'>Vérification de compte</a>";
+                        $retval=sendmail($subject, $message, $mail);
+                        if( $retval == true ) {
+                            echo "Message sent successfully...";
+                        }else {
+                            echo "Message could not be sent...";
+                        }
+                        $success = "Compte créé avec succès ! Vous devez le vérifier avant 24 heures !";
+                    }
                 }
             }
         }
     }
+}
+else{
+    header("Location: home.php");
 }
 ?>
 
@@ -77,7 +83,7 @@ if(isset($_POST['register'])){
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../css/signup.css">
+    <link rel="stylesheet" href="../../css/signup.css">
     <title>S'inscrire</title>
 </head>
 
@@ -85,10 +91,10 @@ if(isset($_POST['register'])){
     <div class="container register">
         <div class="row">
             <div class="col-md-3 register-left">
-                <img src="../images/music.png" alt="" />
+                <img src="../../images/music.png" alt="" />
                 <h3>Bienvenue</h3>
                 <p>Vous êtes à 30 secondes de créer votre playlist !</p>
-                <form action="loginPage.php">
+                <form action="login.php">
                     <input type="submit" name="connexion" value="Connexion" /><br />
                 </form>
             </div>

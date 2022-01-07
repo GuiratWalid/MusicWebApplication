@@ -1,28 +1,39 @@
 <?php 
-$error=NULL;
-if(isset($_COOKIE['userid'])){
-    header('Location: ../index.php');
-}
-if(isset($_POST['signin'])){
-    //Get form data
-    $login=$_POST['login'];
-    $password=$_POST['password'];
-    $password=md5($password);
-    include('connexion.php');
-    $query="SELECT * FROM users WHERE (username='$login' OR email='$login') AND password='$password' LIMIT 1";
-    $result = $connexion->query($query); 
-    if($result->num_rows==1){
-        if (isset($_POST["garder"])){
-            while ($row = mysqli_fetch_assoc($result)) {
-              $userid=$row['userid'];
-              setcookie('userid',$userid,time()+3600,'/');
+include('../tools/checkSession.php');
+if(!check("user")){
+    $error=NULL;
+    if(isset($_POST['signin'])){
+        //Get form data
+        $login=$_POST['login'];
+        $password=$_POST['password'];
+        $password=md5($password);
+        include('../tools/connexion.php');
+        $query="SELECT * FROM users WHERE (username='$login' OR email='$login') AND role ='user' LIMIT 1";
+        $result = $connexion->query($query); 
+        if($result->fetch_assoc()){
+            $query1="SELECT * FROM users WHERE (username='$login' OR email='$login') AND password='$password' AND role ='user' LIMIT 1";
+            $result1 = $connexion->query($query1); 
+            if($row = $result1->fetch_assoc()){
+                session_start();
+                $_SESSION["userid"]=$row["userid"];
+                if (isset($_POST["garder"])){
+                    $array=array($login,$password);
+                    $user=implode("%",$array);
+                    setcookie ("user",$user,time()+ (10 * 365 * 24 * 60 * 60),"/");
+                }
+                header("Location: home.php");
+            }
+            else{
+                $error="Mot de passe incorrect !";
             }
         }
-        header("Location: ../index.php");
+        else{
+            $error="Utilisateur introuvable !";
+        }
     }
-    else{
-        $error="Utilisateur introuvable !";
-    }
+}
+else{
+    header("Location: home.php");
 }
 ?>
 
@@ -36,7 +47,7 @@ if(isset($_POST['signin'])){
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="../css/signup.css">
+    <link rel="stylesheet" href="../../css/signup.css">
     <title>S'inscrire</title>
 </head>
 
@@ -44,10 +55,10 @@ if(isset($_POST['signin'])){
     <div class="container register">
         <div class="row">
             <div class="col-md-3 register-left">
-                <img src="../images/music.png" alt="" />
+                <img src="../../images/music.png" alt="" />
                 <h3>Bienvenue</h3>
                 <p>Connectez vous et créez votre playlist !</p>
-                <form action="registerPage.php">
+                <form action="register.php">
                     <input type="submit" name="register" value="Créer un compte" /><br />
                 </form>
             </div>
@@ -76,7 +87,7 @@ if(isset($_POST['signin'])){
                                     <label for="garder">Me rappeler</label>
                                 </div>
                                 <p><a href="mailPasswordForgotten.php">Vous n'avez oublié votre mot de passe ? </a></p>
-                                <p>Vous n'avez pas un compte ? <a href="registerPage.php">créer un compte</a></p>
+                                <p>Vous n'avez pas un compte ? <a href="register.php">créer un compte</a></p>
                                 <input type="submit" class="btnRegister" name="signin" value="Se connecter" />
                             </form>
                         </div>

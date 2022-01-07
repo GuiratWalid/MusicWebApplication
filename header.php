@@ -66,7 +66,7 @@
                       <li class="active"> <a href="index.html">Acceuil</a> </li>
                   
                       <li> <a href="about.html">A propos</a> </li>
-                      <li > <a   href="php/loginPage.php">Login</a> </li>
+                      <li > <a   href="php/user/login.php">Login</a> </li>
                       
                      </ul>
                    </nav>

@@ -8,37 +8,7 @@
           <div class="row">
             <div class="col-md-12">
               <form class="contact_bg">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="titlepage">
-                  <h2>Contact us</h2>
-                </div>
-                <div class="col-md-12">
-                  <input class="contactus" placeholder="Your Name" type="text" name="Your Name">
-                </div>
-                <div class="col-md-12">
-                  <input class="contactus" placeholder="Your Email" type="text" name="Your Email">
-                </div>
-                <div class="col-md-12">
-                  <input class="contactus" placeholder="Your Phone" type="text" name="Your Phone">
-                </div>
-                <div class="col-md-12">
-                  <textarea class="textarea" placeholder="Message" type="text" name="Message"></textarea>
-                </div>
-                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
-                  <button class="send">Send</button>
-                </div>
-              </div>
-            </div>
-            </form>
-
-            </div>
-            <div class="col-md-12 border_top">
-              <form class="news">
-               <h3>Newsletter</h3>
-                <input class="newslatter" placeholder="ENTER YOUR MAIL" type="text" name=" ENTER YOUR MAIL">
-                <button class="submit">Subscribe</button>
-              </form>
+              </form> 
             </div>
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 ">
               <div class="row">
@@ -75,7 +45,7 @@
                <div class="container">
               <div class="copyright">
                
-                  <p>Copyright 2019 All Right Reserved By <a href="https://html.design/">Free  html Templates</a></p>
+                  <p>Copyright <?php echo date("Y"); ?> All Right Reserved By <a href="https://html.design/">Free  html Templates</a></p>
                 </div>
               </div>
             </div>
