@@ -1,5 +1,6 @@
 <?php
-    $msg="";
+    $error=NULL;
+    $success = NULL;
     if(isset($_POST["changer"])){
         $email = $_POST["email"];
         include('../tools/connexion.php');
@@ -9,17 +10,20 @@
             $Vkey = $row["vkey"];
             $dest = $email;
             $objet = "Mot de passe oublié !";
-            $contenu="<a href='http://localhost/music/php/passwordForgotten.php?vkey=$Vkey'>Vérification de compte</a>";
+            $contenu="<h1 style=\"text-align:center; color:blue;\">Mot de passe oublié !</h1><br/>"
+            ."<h4 style=\"text-align:center; color:gray;\">Music Application</h4><br/><br/>"
+            ."<p>Pour modifier votre mot de passe, veuillez cliquez ici : "
+            ."<a href=http://localhost/music/php/user/passwordForgotten.php?vkey=$Vkey>Vérification de compte</a></p>";
         
             include('sendMail.php');
             $retval = sendmail($objet, $contenu, $dest);
-            if( $retval == true ) 
-                $msg = "Email envoyé avec succès !";
+            if( $retval ) 
+                $success = "Email envoyé avec succès !";
             else
-                $msg = "Echec d'envoyer un email !";
+                $error = "Echec d'envoyer un email !";
         }
         else{
-            $msg = "L'adresse email incorrecte !";
+            $error = "L'adresse email incorrecte !";
         }
     }
 ?>
@@ -53,8 +57,11 @@
                             <div class="col-2"></div>
                             <form class="col-8" method="POST" action="">
                                 <?php 
-                                    if($msg !== ""){
-                                        echo "<div class=\"alert alert-danger text-center\">$msg</div>";
+                                    if(!($success == null)){
+                                        echo "<div class=\"alert alert-success text-center\">$success</div>";
+                                    }
+                                    if(!($error == null)){
+                                        echo "<div class=\"alert alert-danger text-center\">$error</div>";
                                     }
                                 ?>
                                 <div class="form-group">
