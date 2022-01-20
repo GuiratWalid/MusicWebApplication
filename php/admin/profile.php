@@ -124,12 +124,14 @@
                     $query2 .= ", ";
                 }
                 $query2 .= " image = '".$filename."' ";
-                unlink('../../images/uploads/'.$user->image);
+                if($user->image != "anonyme.png")
+                    unlink('../../images/uploads/'.$user->image);
             }
         }
         $query2 .= " WHERE userid = ".$userid;
         if($connexion->query($query2)){
             $success = "Profil mis à jour avec succès !";
+            header("Location: profile.php");
         }
     }
 
@@ -389,7 +391,7 @@
                     <div class="col-lg-8 col-xlg-9 col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <form class="form-horizontal form-material" action="" method="POST" enctype="multipart/form-data">
+                                <form class="form-horizontal form-material" action="profile.php" method="POST" enctype="multipart/form-data">
                                     <div class="form-group mb-4">
                                         <label class="col-md-12 p-0">Nom et prénom</label>
                                         <div class="col-md-12 border-bottom p-0">

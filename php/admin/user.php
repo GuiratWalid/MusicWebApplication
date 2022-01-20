@@ -43,11 +43,21 @@
         }
         
         if(isset($_POST["delete"])){
-            unlink('../../images/uploads/'.$user2->image);
-            $query3 = "DELETE FROM users WHERE userid = ".$id;
+            if($user2->image != "anonyme.png")
+                unlink('../../images/uploads/'.$user2->image);
+            $query3 = "DELETE FROM users WHERE userid = ".$user2->userid;
             $connexion->query($query3);
             header("Location: users.php");
         }
+
+        if(isset($_POST["deletepost"])){
+            unlink('../../images/uploads/'.$_POST["imagepost"]);
+            unlink('../../audio/uploads/'.$_POST["filepost"]);
+            $query4 = "DELETE FROM posts WHERE postid = ".$_POST["idpost"];
+            $connexion->query($query4);
+            header("Location: user.php?userid=".$user2->userid);
+        }
+
     }
     else{
         header("Location: login.php");
@@ -303,38 +313,60 @@
                     <!-- Column -->
                     <!-- Column -->
                     <div class="col-lg-8 col-xlg-9 col-md-12">
-                        <div class="posts-content">
+                        <div class="container-fluid">
                             <?php
-                                $query4 = "SELECT p.image, p.file, p.titre, p.date FROM users u, posts p WHERE u.userid = p.userid AND u.userid = ".$user2->userid;
+                                $query4 = "SELECT p.image, p.file, p.titre, p.date, p.userid, p.postid FROM users u, posts p WHERE u.userid = p.userid AND u.userid = ".$user2->userid;
                                 $result4 = $connexion->query($query4);
+                                if($result4->num_rows)
                                 while($row = $result4->fetch_assoc()){
                             ?>
                             <div class="row">
                                 <div class="card mb-4">
                                     <div class="card-body">
-                                        <div class="media mb-3">
-                                        <img src="../../images/uploads/<?php echo $user2->image ?>" class="d-block ui-w-40 rounded-circle" alt="">
-                                        <div class="media-body ml-3">
-                                            <?php echo $user2->fullname ?>
-                                            <div class="text-muted small"><?php echo $row['date']; ?></div>
-                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-1 m-1"><a href="user.php?userid=<?php echo $user2->userid ?>"><img src="../../images/uploads/<?php echo $user2->image ?>" class="d-block ui-w-40 rounded-circle" alt=""></a></div>
+                                            <div class="col-9 ml-3">
+                                                <a href="user.php?userid=<?php echo $user2->userid ?>"><?php echo $user2->fullname ?></a>
+                                                <div class="text-muted small"><?php echo $row['date']; ?></div>
+                                            </div>
+                                            <div class="col">
+                                                <form method="POST" action="">
+                                                    <input type="text" name="idpost" value="<?php echo $row["postid"];?>" height="0" width="0" hidden/>
+                                                    <input type="text" name="filepost" value="<?php echo $row["file"];?>" height="0" width="0" hidden/>
+                                                    <input type="text" name="imagepost" value="<?php echo $row["image"];?>" height="0" width="0" hidden/>
+                                                    <button type="submit" class="btn btn-danger rounded-circle ml-5" style="color:white;" name="deletepost">
+                                                        <i class="fa fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
                                         <h4><?php echo $row['titre']; ?></h4>
-                                        <img src='../../images/uploads/<?php echo $row['image']; ?>' height="80%" width="100%"/>
+                                        <a href="post.php?postid=<?php echo $row['postid']; ?>"><img src='../../images/uploads/<?php echo $row['image']; ?>' height="80%" width="100%"/></a>
                                         <audio controls style="width:100%;position: relative;bottom: 60px;">
                                             <source src="../../audio/uploads/<?php echo $row['file']; ?>"/>
                                         </audio>
                                     </div>
                                     <div class="card-footer">
-                                        <a href="javascript:void(0)" class="d-inline-block text-muted">
-                                            <strong>123</strong> Likes</small>
+                                        <?php
+                                            $query5 = "SELECT count(*) as likes FROM likes WHERE postid = ".$row["postid"];
+                                            $result5 = $connexion->query($query5);
+                                            if($row1 = $result5->fetch_assoc()){
+                                        ?>
+                                        <a href="post.php?postid=<?php echo $row['postid']; ?>" class="d-inline-block text-muted">
+                                            <strong><?php echo $row1["likes"]; ?></strong> J'aime - </small>
                                         </a>
-                                        <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                                            <strong>12</strong> Comments</small>
+                                        <?php
+                                            }
+                                            $query6 = "SELECT count(*) as comments FROM comments WHERE postid = ".$row["postid"];
+                                            $result6 = $connexion->query($query6);
+                                            if($row2 = $result6->fetch_assoc()){
+                                        ?>
+                                        <a href="post.php?postid=<?php echo $row['postid']; ?>" class="d-inline-block text-muted ml-3">
+                                            <strong><?php echo $row2["comments"]; ?></strong> Commentaires</small>
                                         </a>
-                                        <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
-                                        <small class="align-middle">Repost</small>
-                                        </a>
+                                        <?php
+                                            }
+                                        ?>
                                     </div>
                                 </div>
                             </div>

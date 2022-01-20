@@ -40,10 +40,14 @@
         if(isset($_POST['add'])){
 
             //upload image initialization
-            $filename = md5(time());
-            $filename .= $_FILES["image"]["name"];
-            $tempname = $_FILES["image"]["tmp_name"];    
-            $folder = "../../images/uploads/".$filename;
+            if(!empty($_FILES["image"]["name"])){
+                $filename = md5(time());
+                $filename .= $_FILES["image"]["name"];
+                $tempname = $_FILES["image"]["tmp_name"];
+                $folder = "../../images/uploads/".$filename;
+            }
+            else
+                $filename = "anonyme.png";
     
             //Get form data
             $fullname=$_POST['fullname'];
@@ -71,20 +75,22 @@
                     $error="L'email doit être unique !";
                 }
                 else{
-                    $query="SELECT * FROM users WHERE username='$username' LIMIT 1";
-                    $result = $connexion->query($query); 
+                    $query1="SELECT * FROM users WHERE username='$username' LIMIT 1";
+                    $result = $connexion->query($query1); 
                     if($result->num_rows==1){
                         $error="Le username doit être unique !";
                     }
                     else{
-                        $query="insert into users (username,fullname,password,genre,lieu,datenais,email,image,vkey,role,verifier) values ('$username','$fullname','$password','$genre','$lieu','$datenais','$email','$filename','$Vkey','admin','1')";
-                        //upload image
-                        if (move_uploaded_file($tempname, $folder))  {
-                            $success = "Image uploaded successfully";
-                        }else{
-                            $error = "Failed to upload image";
-                    }
-                        if (mysqli_query($connexion,$query)){
+                        $query2="insert into users (username,fullname,password,genre,lieu,datenais,email,image,vkey,role,verifier) values ('$username','$fullname','$password','$genre','$lieu','$datenais','$email','$filename','$Vkey','admin','1')";
+                        if ($connexion->query($query2)){
+                            if(!empty($_FILES["image"]["name"])){
+                                //upload image
+                                if (move_uploaded_file($tempname, $folder))  {
+                                    $success = "Image uploaded successfully";
+                                }else{
+                                    $error = "Failed to upload image";
+                                }
+                            }
                             $success = "Administrateur ajouté avec succès !";
                         }
                     }

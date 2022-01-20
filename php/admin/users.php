@@ -39,7 +39,8 @@
             $query3 = "SELECT image FROM users WHERE userid = ".$id;
             $result3 = $connexion->query($query3);
             if($row = $result3->fetch_assoc()){
-                unlink('../../images/uploads/'.$row["image"]);
+                if($row["image"] != "anonyme.png")
+                    unlink('../../images/uploads/'.$row["image"]);
             }
             $query4 = "DELETE FROM users WHERE userid = ".$id;
             $connexion->query($query4);
@@ -49,7 +50,8 @@
             $query5 = "SELECT image FROM users WHERE role = 'user'";
             $result5 = $connexion->query($query5);
             while($row = $result5->fetch_assoc()){
-                unlink('../../images/uploads/'.$row["image"]);
+                if($row["image"] != "anonyme.png")
+                    unlink('../../images/uploads/'.$row["image"]);
             }
             $query6 = "DELETE FROM users WHERE role = 'user'";
             $connexion->query($query6);

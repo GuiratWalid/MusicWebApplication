@@ -6,12 +6,16 @@ if(!check("user")){
     if(isset($_POST['register'])){
 
         //upload image initialization
-        $filename = md5(time());
-        $filename .= $_FILES["image"]["name"];
-        $tempname = $_FILES["image"]["tmp_name"];    
-        $folder = "../../images/uploads/".$filename;
+        if(!empty($_FILES["image"]["name"])){
+            $filename = md5(time());
+            $filename .= $_FILES["image"]["name"];
+            $tempname = $_FILES["image"]["tmp_name"];    
+            $folder = "../../images/uploads/".$filename;
+        }
+        else
+            $filename = "anonyme.png";
 
-        //Get form data
+        //Get form data 
         $fullname=$_POST['fullname'];
         $email=$_POST['email'];
         $password=$_POST['password'];
@@ -44,13 +48,16 @@ if(!check("user")){
                 }
                 else{
                     $query="insert into users (username,fullname,password,genre,lieu,datenais,email,image,vkey) values ('$username','$fullname','$password','$genre','$lieu','$datenais','$email','$filename','$Vkey')";
-                    //upload image
-                    if (move_uploaded_file($tempname, $folder))  {
-                        $success = "Image uploaded successfully";
-                    }else{
-                        $error = "Failed to upload image";
-                }
+                    
                     if (mysqli_query($connexion,$query)){
+                        if(!empty($_FILES["image"]["name"])){
+                            //upload image
+                            if (move_uploaded_file($tempname, $folder))  {
+                                $success = "Image uploaded successfully";
+                            }else{
+                                $error = "Failed to upload image";
+                            }
+                        }
                         include('sendMail.php');
                         $success = "Compte créé avec succès !\n Veuillez le vérifier avec votre email";
                         $subject="Email de vérification";
