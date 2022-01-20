@@ -18,7 +18,7 @@
                     $success = "Mot de passe changé avec succès !";
                 }
                 else{
-                    echo "Erreur de modification du mot de passe !";
+                    $error = "Erreur de modification du mot de passe !";
                 }
             }
         }

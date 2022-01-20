@@ -46,20 +46,23 @@ if(!check("user")){
                     $query="insert into users (username,fullname,password,genre,lieu,datenais,email,image,vkey) values ('$username','$fullname','$password','$genre','$lieu','$datenais','$email','$filename','$Vkey')";
                     //upload image
                     if (move_uploaded_file($tempname, $folder))  {
-                        $msg = "Image uploaded successfully";
+                        $success = "Image uploaded successfully";
                     }else{
-                        $msg = "Failed to upload image";
+                        $error = "Failed to upload image";
                 }
                     if (mysqli_query($connexion,$query)){
                         include('sendMail.php');
                         $success = "Compte créé avec succès !\n Veuillez le vérifier avec votre email";
                         $subject="Email de vérification";
-                        $message="<a href='http://localhost/music/php/verify.php?vkey=$Vkey'>Vérification de compte</a>";
-                        $retval=sendmail($subject, $message, $mail);
+                        $message="<h1 style=\"text-align:center; color:blue;\">Vérification d'un compte</h1><br/>"
+                        ."<h4 style=\"text-align:center; color:gray;\">Music Application</h4><br/><br/>"
+                        ."<p>Pour vérifier votre compte, veuillez cliquez ici : "
+                        ."<a href='http://localhost/music/php/user/verify.php?vkey=$Vkey'>Modifier le mot de passe</a></p>";
+                        $retval=sendmail($subject, $message, $email);
                         if( $retval == true ) {
-                            echo "Message sent successfully...";
+                            $msg = "Message sent successfully...";
                         }else {
-                            echo "Message could not be sent...";
+                            $msg = "Message could not be sent...";
                         }
                         $success = "Compte créé avec succès ! Vous devez le vérifier avant 24 heures !";
                     }
