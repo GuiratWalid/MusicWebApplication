@@ -13,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="viewport" content="initial-scale=1, maximum-scale=1">
   <!-- site metas -->
-  <title>Entro</title>
+  <title>Music Hub</title>
   <meta name="keywords" content="">
   <meta name="description" content="">
   <meta name="author" content="">
@@ -52,7 +52,7 @@
               <div class="full">
                 <div class="center-desk">
                   <div class="logo">
-                    <a href="index.html"><img src="images/logo.png" alt="#" /></a>
+                    <a href="index.php"><img src="images/logo.png" alt="#"/></a>
                   </div>
                 </div>
               </div>
@@ -63,9 +63,9 @@
                 <div class="limit-box">
                   <nav class="main-menu ">
                     <ul class="menu-area-main">
-                      <li class="active"> <a href="index.html">Acceuil</a> </li>
+                      <li class="active"> <a href="index.php">Acceuil</a> </li>
                   
-                      <li> <a href="about.html">A propos</a> </li>
+                      <li> <a href="index.php#about">A propos</a> </li>
                       <li > <a   href="php/user/login.php">Login</a> </li>
                       
                      </ul>

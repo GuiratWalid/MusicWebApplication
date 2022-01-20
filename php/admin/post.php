@@ -46,10 +46,6 @@
                 header("Location: posts.php");
             }
         }
-    }
-    else{
-        header("Location: login.php");
-    }
 ?>
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -107,14 +103,9 @@
                         <!-- Logo icon -->
                         <b class="logo-icon">
                             <!-- Dark Logo icon -->
-                            <img src="../../plugins/images/logo-icon.png" alt="homepage" />
+                            <img src="../../images/logo1.png" alt="homepage" width="220"/>
                         </b>
                         <!--End Logo icon -->
-                        <!-- Logo text -->
-                        <span class="logo-text">
-                            <!-- dark Logo text -->
-                            <img src="../../plugins/images/logo-text.png" alt="homepage" />
-                        </span>
                     </a>
                     <!-- ============================================================== -->
                     <!-- End Logo -->
@@ -283,16 +274,16 @@
                     <div class="col-lg-8 col-xlg-9 col-md-12">
                         <div class="container-fluid">
                             <?php
-                                $query4 = "SELECT p.image, p.file, p.titre, p.date, u.userid, p.postid, u.image as userimg, u.fullname FROM users u, posts p WHERE u.userid = p.userid AND u.userid = 51";
+                                $query4 = "SELECT p.image, p.file, p.titre, p.date, u.userid, p.postid, u.image as userimg, u.fullname FROM users u, posts p WHERE u.userid = p.userid AND p.postid = ". $_GET['postid'];
                                 $result4 = $connexion->query($query4);
                                 if($row = $result4->fetch_assoc()){
                             ?>
                             <div class="row">
                                 <div class="card mb-4">
                                     <div class="card-body">
-                                        <div class="media mb-3">
-                                            <a href="user.php?userid=<?php echo $row["userid"] ?>"><img src="../../images/uploads/<?php echo $row["userimg"]; ?>" class="d-block ui-w-40 rounded-circle" alt=""></a>
-                                            <div class="media-body ml-3">
+                                        <div class="row mb-3">
+                                            <div class="col-1 m-1"><a href="user.php?userid=<?php echo $row["userid"] ?>"><img src="../../images/uploads/<?php echo $row["userimg"]; ?>" class="d-block ui-w-40 rounded-circle" alt=""></a></div>
+                                            <div class="col-9 ml-3">
                                                 <a href="user.php?userid=<?php echo $row["userid"] ?>"><?php echo $row["fullname"]; ?></a>
                                                 <div class="text-muted small"><?php echo $row['date']; ?></div>
                                             </div>
@@ -376,7 +367,7 @@
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <footer class="footer text-center"> <?php echo date("Y"); ?> © Music application
+            <footer class="footer text-center"> <?php echo date("Y"); ?> © Music Hub
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->
@@ -405,3 +396,9 @@
 </body>
 
 </html>
+<?php
+    }
+    else{
+        header("Location: login.php");
+    }
+?>

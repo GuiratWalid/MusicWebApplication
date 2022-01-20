@@ -315,9 +315,12 @@
                     <div class="col-lg-8 col-xlg-9 col-md-12">
                         <div class="container-fluid">
                             <?php
-                                $query4 = "SELECT p.image, p.file, p.titre, p.date, p.userid, p.postid FROM users u, posts p WHERE u.userid = p.userid AND u.userid = ".$user2->userid;
+                                $query4 = "SELECT p.image, p.file, p.titre, p.date, p.userid, p.postid FROM users u, posts p WHERE u.userid = p.userid AND u.userid = ".$user2->userid." ORDER BY p.date DESC";
                                 $result4 = $connexion->query($query4);
-                                if($result4->num_rows)
+                                if($result4->num_rows == 0){
+                                    echo "<div class=\"m-0 alert alert-danger text-center\">$user2->fullname n'a pas de publications !</div>";
+                                }
+                                else
                                 while($row = $result4->fetch_assoc()){
                             ?>
                             <div class="row">

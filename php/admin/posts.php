@@ -32,6 +32,15 @@
             global $user;
             $user = new User($row["userid"],$row["fullname"],$row["datenais"],$row["username"],$row["genre"],$row["lieu"],$row["password"],$row["email"],$row["image"]);
         }
+
+        if(isset($_POST["deletepost"])){
+            unlink('../../images/uploads/'.$_POST["imagepost"]);
+            unlink('../../audio/uploads/'.$_POST["filepost"]);
+            $query4 = "DELETE FROM posts WHERE postid = ".$_POST["idpost"];
+            $connexion->query($query4);
+            header("Location: posts.php");
+        }
+
     }
     else{
         header("Location: login.php");
@@ -93,14 +102,9 @@
                         <!-- Logo icon -->
                         <b class="logo-icon">
                             <!-- Dark Logo icon -->
-                            <img src="../../plugins/images/logo-icon.png" alt="homepage" />
+                            <img src="../../images/logo1.png" alt="homepage" width="220"/>
                         </b>
                         <!--End Logo icon -->
-                        <!-- Logo text -->
-                        <span class="logo-text">
-                            <!-- dark Logo text -->
-                            <img src="../../plugins/images/logo-text.png" alt="homepage" />
-                        </span>
                     </a>
                     <!-- ============================================================== -->
                     <!-- End Logo -->
@@ -233,7 +237,7 @@
             <!-- ============================================================== -->
             <div class="page-breadcrumb bg-white">
                 <div class="row align-items-center">
-                    <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+                    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
                         <h4 class="page-title">Publications</h4>
                     </div>
                 </div>
@@ -259,34 +263,48 @@
                     <div class="col-lg-8 col-xlg-9 col-md-12">
                         <div class="container-fluid">
                             <?php
-                                $query4 = "SELECT p.image, p.file, p.titre, p.date, u.userid, p.postid, u.image as userimg, u.fullname FROM users u, posts p WHERE u.userid = p.userid AND u.userid = 51";
+                                $query4 = "SELECT p.image, p.file, p.titre, p.date, u.userid, p.postid, u.image as userimg, u.fullname FROM users u, posts p WHERE u.userid = p.userid  ORDER BY p.date DESC";
                                 $result4 = $connexion->query($query4);
-                                if($row = $result4->fetch_assoc()){
+                                if($result4->num_rows == 0){
+                                    echo "<div class=\"m-0 alert alert-danger text-center\">Il n'y a pas de publications !</div>";
+                                }
+                                else
+                                while($row = $result4->fetch_assoc()){
                             ?>
                             <div class="row">
                                 <div class="card mb-4">
                                     <div class="card-body">
-                                        <div class="media mb-3">
-                                            <a href="user.php?userid=<?php echo $row["userid"] ?>"><img src="../../images/uploads/<?php echo $row["userimg"]; ?>" class="d-block ui-w-40 rounded-circle" alt=""></a>
-                                            <div class="media-body ml-3">
-                                                <a href="user.php?userid=<?php echo $row["userid"] ?>"><?php echo $row["fullname"]; ?></a>
+                                        <div class="row mb-3">
+                                            <div class="col-1 m-1"><a href="user.php?userid=<?php echo $row['userid'] ?>"><img src="../../images/uploads/<?php echo $row['userimg'] ?>" class="d-block ui-w-40 rounded-circle" alt=""></a></div>
+                                            <div class="col-9 ml-3">
+                                                <a href="user.php?userid=<?php echo $row['userid'] ?>"><?php echo $row['fullname'] ?></a>
                                                 <div class="text-muted small"><?php echo $row['date']; ?></div>
+                                            </div>
+                                            <div class="col">
+                                                <form method="POST" action="">
+                                                    <input type="text" name="idpost" value="<?php echo $row["postid"];?>" height="0" width="0" hidden/>
+                                                    <input type="text" name="filepost" value="<?php echo $row["file"];?>" height="0" width="0" hidden/>
+                                                    <input type="text" name="imagepost" value="<?php echo $row["image"];?>" height="0" width="0" hidden/>
+                                                    <button type="submit" class="btn btn-danger rounded-circle ml-5" style="color:white;" name="deletepost">
+                                                        <i class="fa fa-trash-alt"></i>
+                                                    </button>
+                                                </form>
                                             </div>
                                         </div>
                                         <h4><?php echo $row['titre']; ?></h4>
-                                        <img src='../../images/uploads/<?php echo $row['image']; ?>' height="80%" width="100%"/>
+                                        <a href="post.php?postid=<?php echo $row['postid']; ?>"><img src='../../images/uploads/<?php echo $row['image']; ?>' height="80%" width="100%"/></a>
                                         <audio controls style="width:100%;position: relative;bottom: 60px;">
                                             <source src="../../audio/uploads/<?php echo $row['file']; ?>"/>
                                         </audio>
                                     </div>
                                     <div class="card-footer">
-                                        <a href="javascript:void(0)" class="d-inline-block text-muted">
-                                            <?php
-                                                $query5 = "SELECT count(*) as likes FROM likes WHERE postid = ".$row["postid"];
-                                                $result5 = $connexion->query($query5);
-                                                if($row1 = $result5->fetch_assoc()){
-                                            ?>
-                                            <strong><?php echo $row1["likes"]; ?></strong> J'aime | </small>
+                                        <?php
+                                            $query5 = "SELECT count(*) as likes FROM likes WHERE postid = ".$row["postid"];
+                                            $result5 = $connexion->query($query5);
+                                            if($row1 = $result5->fetch_assoc()){
+                                        ?>
+                                        <a href="post.php?postid=<?php echo $row['postid']; ?>" class="d-inline-block text-muted">
+                                            <strong><?php echo $row1["likes"]; ?></strong> J'aime - </small>
                                         </a>
                                         <?php
                                             }
@@ -294,38 +312,14 @@
                                             $result6 = $connexion->query($query6);
                                             if($row2 = $result6->fetch_assoc()){
                                         ?>
-                                        <a href="javascript:void(0)" class="d-inline-block text-muted ml-3">
+                                        <a href="post.php?postid=<?php echo $row['postid']; ?>" class="d-inline-block text-muted ml-3">
                                             <strong><?php echo $row2["comments"]; ?></strong> Commentaires</small>
                                         </a>
+                                        <?php
+                                            }
+                                        ?>
                                     </div>
                                 </div>
-                                        <?php
-                                            }
-                                            $query7 = "SELECT u.userid, u.image, u.fullname, c.date, c.comment, c.commentid FROM comments c, users u WHERE u.userid = c.userid AND postid = ".$row["postid"];
-                                            $result7 = $connexion->query($query7);
-                                            while($row3 = $result7->fetch_assoc()){
-                                        ?>
-                                        <div class="row m-1 rounded-pill" style="background-color:white;">
-                                            <div class="col-1 mt-1">
-                                                <a href="user.php?userid=<?php echo $row3["userid"] ?>"><img src="../../images/uploads/<?php echo $row3["image"]; ?>" class="d-block ui-w-40 rounded-circle" alt=""></a>
-                                            </div>
-                                            <div class="col-9">
-                                                <a href="user.php?userid=<?php echo $row3["userid"] ?>"><?php echo $row3["fullname"]; ?></a>
-                                                <div class="text-muted small"><?php echo $row3['date']; ?></div>
-                                                <p><?php echo $row3['comment']; ?></p>
-                                            </div>
-                                            <div class="col">
-                                                <form method="POST" action="">
-                                                    <input type="text" name="idcomment" value="<?php echo $row3["commentid"];?>" height="0" width="0" hidden/>
-                                                    <button type="submit" class="btn btn-danger rounded-circle m-3" style="color:white;" name="deletecomment">
-                                                        <i class="fa fa-trash-alt"></i>
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <?php
-                                            }
-                                        ?>
                             </div>
                             <?php
                                 }
@@ -352,7 +346,7 @@
             <!-- ============================================================== -->
             <!-- footer -->
             <!-- ============================================================== -->
-            <footer class="footer text-center"> <?php echo date("Y"); ?> © Music application
+            <footer class="footer text-center"> <?php echo date("Y"); ?> © Music Hub
             </footer>
             <!-- ============================================================== -->
             <!-- End footer -->
