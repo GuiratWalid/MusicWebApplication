@@ -30,7 +30,7 @@ function sendmail($objet, $contenu, $destinataire) {
     
     /* DONNEES DESTINATAIRES */
     ##########################
-    $mail->setFrom('guiratguirat123@gmail.com', 'Musique');  //adresse de l'expéditeur (pas d'accents)
+    $mail->setFrom('guiratguirat123@gmail.com', 'Music Hub');  //adresse de l'expéditeur (pas d'accents)
     $mail->addAddress($destinataire, 'Walid');        // Adresse du destinataire (le nom est facultatif)
     $mail->isHTML(true);                                      // email au format HTML
     $mail->Subject = utf8_decode($objet);      // Objet du message (éviter les accents là, sauf si utf8_encode)
