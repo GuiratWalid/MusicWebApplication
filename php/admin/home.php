@@ -256,46 +256,363 @@
                 <!-- Start Page Content -->
                 <!-- ============================================================== -->
                 <!-- Row -->
+                <div class="row alert alert-info" role="alert">
+                    <h4 class="text-center">Statistiques du 24 dernières heures</h4>
+                </div>
                 <div class="row justify-content-center">
                     <div class="col-lg-4 col-md-12">
                         <div class="white-box analytics-info">
-                            <h3 class="box-title">Total Visit</h3>
+                            <h3 class="box-title">Nombre d'administrateurs</h3>
                             <ul class="list-inline two-part d-flex align-items-center mb-0">
                                 <li>
-                                    <div id="sparklinedash"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
+                                    <img src="../../images/img1.png" alt="statistics"/>
                                 </li>
-                                <li class="ms-auto"><span class="counter text-success">659</span></li>
+                                <?php 
+                                    $query2 = "SELECT count(*) as numadmin from users where role = 'admin' and  date > NOW() - INTERVAL 1 DAY";
+                                    $result2 = $connexion->query($query2);
+                                    if($row = $result2->fetch_assoc()){
+                                ?>
+                                <li class="ms-auto"><span class="counter text-success"><?php echo $row["numadmin"]; }?></span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12">
                         <div class="white-box analytics-info">
-                            <h3 class="box-title">Total Page Views</h3>
+                            <h3 class="box-title">Nombre d'utilisateurs</h3>
                             <ul class="list-inline two-part d-flex align-items-center mb-0">
                                 <li>
-                                    <div id="sparklinedash2"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
+                                    <img src="../../images/img2.png" alt="statistics"/>
                                 </li>
-                                <li class="ms-auto"><span class="counter text-purple">869</span></li>
+                                <?php 
+                                    $query3 = "SELECT count(*) as numuser from users where role = 'user' and  date > NOW() - INTERVAL 1 DAY";
+                                    $result3 = $connexion->query($query3);
+                                    if($row = $result3->fetch_assoc()){
+                                ?>
+                                <li class="ms-auto"><span class="counter text-purple"><?php echo $row["numuser"]; }?></span></li>
                             </ul>
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12">
                         <div class="white-box analytics-info">
-                            <h3 class="box-title">Unique Visitor</h3>
+                            <h3 class="box-title">Nombre de publications</h3>
                             <ul class="list-inline two-part d-flex align-items-center mb-0">
                                 <li>
-                                    <div id="sparklinedash3"><canvas width="67" height="30"
-                                            style="display: inline-block; width: 67px; height: 30px; vertical-align: top;"></canvas>
-                                    </div>
+                                    <img src="../../images/img3.png" alt="statistics"/>
                                 </li>
-                                <li class="ms-auto"><span class="counter text-info">911</span>
+                                <?php 
+                                    $query5 = "SELECT count(*) as numpost from posts where date > NOW() - INTERVAL 1 DAY";
+                                    $result5 = $connexion->query($query5);
+                                    if($row = $result5->fetch_assoc()){
+                                ?>
+                                <li class="ms-auto"><span class="counter text-info"><?php echo $row["numpost"]; }?></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Nombre de j'aime</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <img src="../../images/img4.png" alt="statistics"/>
+                                </li>
+                                <?php 
+                                    $query6 = "SELECT count(*) as numlike from likes where date > NOW() - INTERVAL 1 DAY";
+                                    $result6 = $connexion->query($query6);
+                                    if($row = $result6->fetch_assoc()){
+                                ?>
+                                <li class="ms-auto"><span class="counter text-danger"><?php echo $row["numlike"]; }?></span>
                                 </li>
                             </ul>
                         </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Nombre de commentaires</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <img src="../../images/img1.png" alt="statistics"/>
+                                </li>
+                                <?php 
+                                    $query7 = "SELECT count(*) as numcomment from comments where date > NOW() - INTERVAL 1 DAY";
+                                    $result7 = $connexion->query($query7);
+                                    if($row = $result7->fetch_assoc()){
+                                ?>
+                                <li class="ms-auto"><span class="counter text-success"><?php echo $row["numcomment"]; }?></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row -->
+                <!-- Row -->
+                <div class="row alert alert-info" role="alert">
+                    <h4 class="text-center">Top 10 utilisateurs du 24 dernières heures</h4>
+                </div>
+                <div class="row">
+                    <!-- Column -->
+                    <div class="white-box">
+                        <?php 
+                            class Transaction {
+                                public $userid = null;
+                                public $image = null;
+                                public $fullname = null;
+                                public $numpost = null;
+                                public $numlike = null;
+                                public $numcomment = null;
+                                public $total = null;
+                            }
+                            $array = array();
+                            $query8 = "SELECT userid, fullname, image FROM users where role = 'user'";
+                            $result8 = $connexion->query($query8);
+                            while($row0 = $result8->fetch_assoc()){
+                                $t = new Transaction();
+                                $t->userid = $row0["userid"];
+                                $t->image = $row0["image"];
+                                $t->fullname = $row0["fullname"];
+                                $query9 = "SELECT COUNT(postid) as numpost FROM posts WHERE userid = '".$t->userid."' AND date > NOW() - INTERVAL 1 DAY";
+                                $result9 = $connexion->query($query9);
+                                if($row1 = $result9->fetch_assoc()){
+                                    $t->numpost = $row1["numpost"];
+                                }
+                                $query9 = "SELECT COUNT(likeid) as numlike FROM likes where userid = '".$t->userid."' AND date > NOW() - INTERVAL 1 DAY";
+                                $result9 = $connexion->query($query9);
+                                if($row1 = $result9->fetch_assoc()){
+                                    $t->numlike = $row1["numlike"];
+                                }
+                                $query9 = "SELECT COUNT(commentid) as numcomment FROM comments where userid = '".$t->userid."' AND date > NOW() - INTERVAL 1 DAY";
+                                $result9 = $connexion->query($query9);
+                                if($row1 = $result9->fetch_assoc()){
+                                    $t->numcomment = $row1["numcomment"];
+                                }
+                                $t->total = $t->numpost + $t->numlike + $t->numcomment;
+                                array_push($array,$t);
+                            }
+                            if(count($array) != 0){
+                                usort($array,function($first,$second){
+                                    return $first->total < $second->total;
+                                });
+                            ?>
+                            <div class="table-responsive">
+                                <table class="table text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0">Rang</th>
+                                            <th></th>
+                                            <th class="border-top-0">Utilisateurs</th>
+                                            <th class="border-top-0">Publications</th>
+                                            <th class="border-top-0">J'aime</th>
+                                            <th class="border-top-0">Commentaires</th>
+                                            <th class="border-top-0">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                            foreach($array as $key => $value){
+                                                if($key >= 10) 
+                                                    break;
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $key+1;?></td>
+                                            <td class="border-top-0">
+                                                <a href="user.php?userid=<?php echo $value->userid;?>">
+                                                    <img src="../../images/uploads/<?php echo  $value->image; ?>" alt="user-img" width="50" height="50"
+                                                        class="rounded-circle"><span class="text-white font-medium">
+                                                </a>
+                                            </td>
+                                            <td><a href="user.php?userid=<?php echo $value->userid;?>"><?php echo $value->fullname;?></a></td>
+                                            <td><?php echo $value->numpost;?></td>
+                                            <td><?php echo $value->numlike;?></td>
+                                            <td><?php echo $value->numcomment;?></td>
+                                            <td><?php echo $value->total;?></td>
+                                        </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <?php   
+                                }
+                                else{
+                                    echo "<div class=\"m-0 alert alert-danger text-center\">Aucun utilisateur trouvé !</div>";
+                                }
+                            ?>
+                    </div>
+                </div>
+                <!-- Row -->
+                <!-- Row -->
+                <div class="row alert alert-info" role="alert">
+                    <h4 class="text-center">Statistiques générales</h4>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 col-md-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Nombre d'administrateurs</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <img src="../../images/img2.png" alt="statistics"/>
+                                </li>
+                                <?php 
+                                    $query2 = "SELECT count(*) as numadmin from users where role = 'admin'";
+                                    $result2 = $connexion->query($query2);
+                                    if($row = $result2->fetch_assoc()){
+                                ?>
+                                <li class="ms-auto"><span class="counter text-purple"><?php echo $row["numadmin"]; }?></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Nombre d'utilisateurs</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <img src="../../images/img3.png" alt="statistics"/>
+                                </li>
+                                <?php 
+                                    $query3 = "SELECT count(*) as numuser from users where role = 'user'";
+                                    $result3 = $connexion->query($query3);
+                                    if($row = $result3->fetch_assoc()){
+                                ?>
+                                <li class="ms-auto"><span class="counter text-info"><?php echo $row["numuser"]; }?></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Nombre de publications</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <img src="../../images/img4.png" alt="statistics"/>
+                                </li>
+                                <?php 
+                                    $query5 = "SELECT count(*) as numpost from posts";
+                                    $result5 = $connexion->query($query5);
+                                    if($row = $result5->fetch_assoc()){
+                                ?>
+                                <li class="ms-auto"><span class="counter text-danger"><?php echo $row["numpost"]; }?></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Nombre de j'aime</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <img src="../../images/img1.png" alt="statistics"/>
+                                </li>
+                                <?php 
+                                    $query6 = "SELECT count(*) as numlike from likes";
+                                    $result6 = $connexion->query($query6);
+                                    if($row = $result6->fetch_assoc()){
+                                ?>
+                                <li class="ms-auto"><span class="counter text-success"><?php echo $row["numlike"]; }?></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-12">
+                        <div class="white-box analytics-info">
+                            <h3 class="box-title">Nombre de commentaires</h3>
+                            <ul class="list-inline two-part d-flex align-items-center mb-0">
+                                <li>
+                                    <img src="../../images/img2.png" alt="statistics"/>
+                                </li>
+                                <?php 
+                                    $query7 = "SELECT count(*) as numcomment from comments";
+                                    $result7 = $connexion->query($query7);
+                                    if($row = $result7->fetch_assoc()){
+                                ?>
+                                <li class="ms-auto"><span class="counter text-purple"><?php echo $row["numcomment"]; }?></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- Row -->
+                <!-- Row -->
+                <div class="row alert alert-info" role="alert">
+                    <h4 class="text-center">Top 10 utilisateurs</h4>
+                </div>
+                <div class="row">
+                    <!-- Column -->
+                    <div class="white-box">
+                        <?php 
+                            $array = array();
+                            $query8 = "SELECT userid, fullname, image FROM users where role = 'user'";
+                            $result8 = $connexion->query($query8);
+                            while($row0 = $result8->fetch_assoc()){
+                                $t = new Transaction();
+                                $t->userid = $row0["userid"];
+                                $t->image = $row0["image"];
+                                $t->fullname = $row0["fullname"];
+                                $query9 = "SELECT COUNT(postid) as numpost FROM posts WHERE userid = '".$t->userid."'";
+                                $result9 = $connexion->query($query9);
+                                if($row1 = $result9->fetch_assoc()){
+                                    $t->numpost = $row1["numpost"];
+                                }
+                                $query9 = "SELECT COUNT(likeid) as numlike FROM likes where userid = '".$t->userid."'";
+                                $result9 = $connexion->query($query9);
+                                if($row1 = $result9->fetch_assoc()){
+                                    $t->numlike = $row1["numlike"];
+                                }
+                                $query9 = "SELECT COUNT(commentid) as numcomment FROM comments where userid = '".$t->userid."'";
+                                $result9 = $connexion->query($query9);
+                                if($row1 = $result9->fetch_assoc()){
+                                    $t->numcomment = $row1["numcomment"];
+                                }
+                                $t->total = $t->numpost + $t->numlike + $t->numcomment;
+                                array_push($array,$t);
+                            }
+                            if(count($array) != 0){
+                                usort($array,function($first,$second){
+                                    return $first->total < $second->total;
+                                });
+                            ?>
+                            <div class="table-responsive">
+                                <table class="table text-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0">Rang</th>
+                                            <th></th>
+                                            <th class="border-top-0">Utilisateurs</th>
+                                            <th class="border-top-0">Publications</th>
+                                            <th class="border-top-0">J'aime</th>
+                                            <th class="border-top-0">Commentaires</th>
+                                            <th class="border-top-0">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php 
+                                            foreach($array as $key => $value){
+                                                if($key >= 10) 
+                                                    break;
+                                        ?>
+                                        <tr>
+                                            <td><?php echo $key+1;?></td>
+                                            <td class="border-top-0">
+                                                <a href="user.php?userid=<?php echo $value->userid;?>">
+                                                    <img src="../../images/uploads/<?php echo  $value->image; ?>" alt="user-img" width="50" height="50"
+                                                        class="rounded-circle"><span class="text-white font-medium">
+                                                </a>
+                                            </td>
+                                            <td><a href="user.php?userid=<?php echo $value->userid;?>"><?php echo $value->fullname;?></a></td>
+                                            <td><?php echo $value->numpost;?></td>
+                                            <td><?php echo $value->numlike;?></td>
+                                            <td><?php echo $value->numcomment;?></td>
+                                            <td><?php echo $value->total;?></td>
+                                        </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <?php   
+                                }
+                                else{
+                                    echo "<div class=\"m-0 alert alert-danger text-center\">Aucun utilisateur trouvé !</div>";
+                                }
+                            ?>
                     </div>
                 </div>
                 <!-- Row -->
@@ -342,6 +659,13 @@
     <script src="../../js/sidebarmenu.js"></script>
     <!--Custom JavaScript -->
     <script src="../../js/custom1.js"></script>
+    
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="../../plugins/bower_components/jquery-sparkline/jquery.sparkline.min.js"></script>
+    <!--chartis chart-->
+    <script src="../../plugins/bower_components/chartist/dist/chartist.min.js"></script>
+    <script src="../../plugins/bower_components/chartist-plugin-tooltips/dist/chartist-plugin-tooltip.min.js"></script>
+    <script src="../../js/pages/dashboards/dashboard1.js"></script>
 </body>
 
 </html>

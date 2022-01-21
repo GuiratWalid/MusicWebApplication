@@ -72,7 +72,11 @@
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+    <![endif]-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -295,7 +299,7 @@
                                         </audio>
                                     </div>
                                     <div class="card-footer">
-                                        <a href="javascript:void(0)" class="d-inline-block text-muted">
+                                        <a href="javascript:void(0)" class="d-inline-block text-muted"  onclick="$('.alert').is(':hidden')?$('.alert').show():$('.alert').hide();">
                                             <?php
                                                 $query5 = "SELECT count(*) as likes FROM likes WHERE postid = ".$row["postid"];
                                                 $result5 = $connexion->query($query5);
@@ -314,24 +318,43 @@
                                         </a>
                                     </div>
                                 </div>
-                                        <?php
-                                            }
-                                            $query7 = "SELECT u.userid, u.image, u.fullname, c.date, c.comment, c.commentid FROM comments c, users u WHERE u.userid = c.userid AND postid = ".$row["postid"];
-                                            $result7 = $connexion->query($query7);
-                                            while($row3 = $result7->fetch_assoc()){
-                                        ?>
-                                        <div class="row m-1 rounded-pill" style="background-color:white;">
-                                            <div class="col-1 mt-1">
+                                <div class="alert alert-light alert-dismissible hide" role="alert">
+                                    <div class="row">
+                                            <?php
+                                                }
+                                                $query7 = "SELECT u.userid, u.image, u.fullname, l.date FROM likes l, users u WHERE u.userid = l.userid AND postid = ".$row["postid"]." ORDER BY l.date DESC";
+                                                $result7 = $connexion->query($query7);
+                                                while($row3 = $result7->fetch_assoc()){
+                                            ?>
+                                            <div class="col-1 my-1">
                                                 <a href="user.php?userid=<?php echo $row3["userid"] ?>"><img src="../../images/uploads/<?php echo $row3["image"]; ?>" class="d-block ui-w-40 rounded-circle" alt=""></a>
                                             </div>
-                                            <div class="col-9">
+                                            <div class="col-3">
                                                 <a href="user.php?userid=<?php echo $row3["userid"] ?>"><?php echo $row3["fullname"]; ?></a>
                                                 <div class="text-muted small"><?php echo $row3['date']; ?></div>
-                                                <p><?php echo $row3['comment']; ?></p>
+                                            </div>
+                                            <?php 
+                                                }
+                                            ?>
+                                    </div>
+                                </div>
+                                        <?php
+                                            $query8 = "SELECT u.userid, u.image, u.fullname, c.date, c.comment, c.commentid FROM comments c, users u WHERE u.userid = c.userid AND postid = ".$row["postid"]." ORDER BY c.date DESC";
+                                            $result8 = $connexion->query($query8);
+                                            while($row4 = $result8->fetch_assoc()){
+                                        ?>
+                                        <div class="row rounded my-1" style="background-color:white;position:relative;left:12px;">
+                                            <div class="col-1 mt-1">
+                                                <a href="user.php?userid=<?php echo $row4["userid"] ?>"><img src="../../images/uploads/<?php echo $row4["image"]; ?>" class="d-block ui-w-40 rounded-circle" alt=""></a>
+                                            </div>
+                                            <div class="col-9">
+                                                <a href="user.php?userid=<?php echo $row4["userid"] ?>"><?php echo $row4["fullname"]; ?></a>
+                                                <div class="text-muted small"><?php echo $row4['date']; ?></div>
+                                                <p><?php echo $row4['comment']; ?></p>
                                             </div>
                                             <div class="col">
                                                 <form method="POST" action="">
-                                                    <input type="text" name="idcomment" value="<?php echo $row3["commentid"];?>" height="0" width="0" hidden/>
+                                                    <input type="text" name="idcomment" value="<?php echo $row4["commentid"];?>" height="0" width="0" hidden/>
                                                     <button type="submit" class="btn btn-danger rounded-circle m-3" style="color:white;" name="deletecomment">
                                                         <i class="fa fa-trash-alt"></i>
                                                     </button>
