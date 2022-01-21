@@ -299,7 +299,7 @@
                                         </audio>
                                     </div>
                                     <div class="card-footer">
-                                        <a href="javascript:void(0)" class="d-inline-block text-muted"  onclick="$('.alert').is(':hidden')?$('.alert').show():$('.alert').hide();">
+                                        <a href="javascript:void(0)" class="d-inline-block text-muted"  data-toggle="modal" data-target="#exampleModalCenter">
                                             <?php
                                                 $query5 = "SELECT count(*) as likes FROM likes WHERE postid = ".$row["postid"];
                                                 $result5 = $connexion->query($query5);
@@ -318,26 +318,36 @@
                                         </a>
                                     </div>
                                 </div>
-                                <div class="alert alert-light alert-dismissible hide" role="alert">
-                                    <div class="row">
-                                            <?php
-                                                }
-                                                $query7 = "SELECT u.userid, u.image, u.fullname, l.date FROM likes l, users u WHERE u.userid = l.userid AND postid = ".$row["postid"]." ORDER BY l.date DESC";
-                                                $result7 = $connexion->query($query7);
-                                                while($row3 = $result7->fetch_assoc()){
-                                            ?>
-                                            <div class="col-1 my-1">
-                                                <a href="user.php?userid=<?php echo $row3["userid"] ?>"><img src="../../images/uploads/<?php echo $row3["image"]; ?>" class="d-block ui-w-40 rounded-circle" alt=""></a>
+                                <!-- Modal -->
+                                <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">J'aime</h5>
                                             </div>
-                                            <div class="col-3">
-                                                <a href="user.php?userid=<?php echo $row3["userid"] ?>"><?php echo $row3["fullname"]; ?></a>
-                                                <div class="text-muted small"><?php echo $row3['date']; ?></div>
+                                            <div class="modal-body">
+                                                <div class="row ml-5">
+                                                    <?php
+                                                        }
+                                                        $query7 = "SELECT u.userid, u.image, u.fullname, l.date FROM likes l, users u WHERE u.userid = l.userid AND postid = ".$row["postid"]." ORDER BY l.date DESC";
+                                                        $result7 = $connexion->query($query7);
+                                                        while($row3 = $result7->fetch_assoc()){
+                                                    ?>
+                                                    <div class="col-1 my-1">
+                                                        <a href="user.php?userid=<?php echo $row3["userid"] ?>"><img src="../../images/uploads/<?php echo $row3["image"]; ?>" class="d-block ui-w-40 rounded-circle" alt=""></a>
+                                                    </div>
+                                                    <div class="col-11 pl-1">
+                                                        <a href="user.php?userid=<?php echo $row3["userid"] ?>"><?php echo $row3["fullname"]; ?></a>
+                                                        <div class="text-muted small"><?php echo $row3['date']; ?></div>
+                                                    </div>
+                                                    <?php 
+                                                        }
+                                                    ?>
                                             </div>
-                                            <?php 
-                                                }
-                                            ?>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
                                         <?php
                                             $query8 = "SELECT u.userid, u.image, u.fullname, c.date, c.comment, c.commentid FROM comments c, users u WHERE u.userid = c.userid AND postid = ".$row["postid"]." ORDER BY c.date DESC";
                                             $result8 = $connexion->query($query8);
